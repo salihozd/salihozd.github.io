@@ -1,0 +1,307 @@
+:root {
+    --bg-color: #1a1b26;
+    /* Dark terminal background (Tokyo Night / Nord style) */
+    --text-color: #a9b1d6;
+    /* Softer white for text */
+    --accent-color: #7aa2f7;
+    /* Nice blue for links/highlights */
+    --keyword-color: #bb9af7;
+    /* Purple for keywords like 'const', 'function' */
+    --string-color: #9ece6a;
+    /* Green for strings */
+    --cursor-color: #c0caf5;
+    --prompt-color: #f7768e;
+    /* Pinkish for the prompt symbol */
+    --font-stack: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', monospace;
+    --container-width: 900px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-stack);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Terminal Container */
+.terminal-window {
+    width: 100%;
+    max-width: var(--container-width);
+    background-color: #16161e;
+    /* Slightly darker than bg for window effect */
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid #2f334d;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.terminal-header {
+    background-color: #1a1b26;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #2f334d;
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.red {
+    background-color: #ff5f56;
+}
+
+.yellow {
+    background-color: #ffbd2e;
+}
+
+.green {
+    background-color: #27c93f;
+}
+
+.terminal-title {
+    margin-left: 15px;
+    color: #565f89;
+    font-size: 0.85rem;
+}
+
+.terminal-body {
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* Typography & Elements */
+h1 {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+p {
+    margin-bottom: 1.2rem;
+    max-width: 65ch;
+}
+
+ul {
+    list-style: none;
+    /* Remove default bullets */
+    padding-left: 0;
+    margin: 0;
+}
+
+li {
+    margin-bottom: 0.3rem;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent-color);
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    color: var(--keyword-color);
+    border-bottom-style: solid;
+}
+
+/* Code Syntax Styling for regular text */
+.keyword {
+    color: var(--keyword-color);
+}
+
+.string {
+    color: var(--string-color);
+}
+
+.variable {
+    color: #e0af68;
+}
+
+/* Orange/Yellow */
+.comment {
+    color: #565f89;
+    font-style: italic;
+}
+
+.prompt {
+    color: var(--prompt-color);
+    margin-right: 10px;
+    user-select: none;
+}
+
+/* Command & Output Distinction */
+.terminal-interaction {
+    margin-bottom: 2rem;
+}
+
+.command-line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.command-line .prompt {
+    color: var(--prompt-color);
+    margin-right: 12px;
+    user-select: none;
+}
+
+.output-block {
+    margin-left: 0;
+    /* Keep it aligned with left or slightly indented if preferred */
+    color: var(--text-color);
+    line-height: 1.7;
+}
+
+/* File Listing Styling for 'ls -la' */
+.file-list {
+    display: grid;
+    grid-template-columns: auto auto auto auto 1fr;
+    gap: 0.5rem 1.5rem;
+    font-family: inherit;
+    color: var(--text-color);
+}
+
+.file-row {
+    display: contents;
+    transition: color 0.2s;
+}
+
+.file-row:hover .file-name a {
+    text-decoration: underline;
+    color: var(--keyword-color);
+}
+
+.permissions {
+    color: #565f89;
+}
+
+.user {
+    color: #e0af68;
+}
+
+.size {
+    color: #565f89;
+    text-align: right;
+}
+
+.date {
+    color: #565f89;
+}
+
+.file-name {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.file-name a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Grid for social links (Removed old .social-list) */
+
+/* Cursor Animation */
+.cursor-container {
+    display: inline-block;
+}
+
+.cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.2em;
+    background-color: var(--cursor-color);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+    body {
+        padding: 5px;
+    }
+
+    .terminal-window {
+        min-height: 90vh;
+    }
+
+    .terminal-body {
+        padding: 15px;
+    }
+
+    .file-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .permissions,
+    .user,
+    .size,
+    .date {
+        display: none;
+        /* Hide extra details on mobile for cleaner look */
+    }
+
+    .file-row::before {
+        content: "-> ";
+        color: var(--prompt-color);
+        margin-right: 5px;
+    }
+}
