@@ -1,17 +1,23 @@
 :root {
-    --bg-color: #1a1b26;
-    /* Dark terminal background (Tokyo Night / Nord style) */
-    --text-color: #a9b1d6;
-    /* Softer white for text */
-    --accent-color: #7aa2f7;
-    /* Nice blue for links/highlights */
-    --keyword-color: #bb9af7;
-    /* Purple for keywords like 'const', 'function' */
-    --string-color: #9ece6a;
-    /* Green for strings */
-    --cursor-color: #c0caf5;
-    --prompt-color: #f7768e;
-    /* Pinkish for the prompt symbol */
+    /* Matrix green-on-black shell palette */
+    --bg-color: #030503;
+    /* Page background, near black */
+    --window-bg: #050805;
+    /* Terminal window background */
+    --border-color: #0f3d1c;
+    --text-color: #2ecc5e;
+    /* Main phosphor green */
+    --bright-green: #00ff41;
+    /* Prompt, headings, highlights */
+    --pale-green: #b8ffc8;
+    /* Strings, emphasized text */
+    --dim-green: #1a7a35;
+    /* Comments, metadata */
+    --accent-color: #00ff41;
+    --keyword-color: #7dff9e;
+    --string-color: #b8ffc8;
+    --cursor-color: #00ff41;
+    --prompt-color: #00ff41;
     --font-stack: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', monospace;
     --container-width: 900px;
 }
@@ -27,7 +33,6 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
     background-color: var(--bg-color);
     color: var(--text-color);
     font-family: var(--font-stack);
@@ -38,8 +43,6 @@ body {
 
 body {
     display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     padding: 20px;
 }
@@ -48,26 +51,28 @@ body {
 .terminal-window {
     width: 100%;
     max-width: var(--container-width);
-    background-color: #16161e;
-    /* Slightly darker than bg for window effect */
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid #2f334d;
+    /* margin auto centers both ways without clipping tall content */
+    margin: auto;
+    background-color: var(--window-bg);
+    border-radius: 6px;
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.07), 0 10px 30px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--border-color);
     overflow: hidden;
     animation: fadeIn 0.5s ease-out;
 }
 
 .terminal-header {
-    background-color: #1a1b26;
+    background-color: #071007;
     padding: 10px 15px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #2f334d;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .terminal-buttons {
     display: flex;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .circle {
@@ -90,19 +95,24 @@ body {
 
 .terminal-title {
     margin-left: 15px;
-    color: #565f89;
+    color: var(--dim-green);
     font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .terminal-body {
     padding: 30px;
     overflow-y: auto;
+    overflow-wrap: break-word;
 }
 
 /* Typography & Elements */
 h1 {
     font-size: 1.5rem;
-    color: var(--accent-color);
+    color: var(--bright-green);
+    text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
     margin-bottom: 1rem;
     font-weight: 700;
 }
@@ -114,28 +124,31 @@ p {
 
 ul {
     list-style: none;
-    /* Remove default bullets */
     padding-left: 0;
     margin: 0;
 }
 
 li {
     margin-bottom: 0.3rem;
+    /* Match paragraph line length; wrapped lines align after the "- " marker */
+    max-width: 65ch;
+    padding-left: 2ch;
+    text-indent: -2ch;
 }
 
 a {
-    color: var(--accent-color);
+    color: var(--bright-green);
     text-decoration: none;
-    border-bottom: 1px dashed var(--accent-color);
+    border-bottom: 1px dashed var(--bright-green);
     transition: all 0.2s ease;
 }
 
 a:hover {
-    color: var(--keyword-color);
+    color: var(--pale-green);
     border-bottom-style: solid;
 }
 
-/* Code Syntax Styling for regular text */
+/* Code Syntax Styling */
 .keyword {
     color: var(--keyword-color);
 }
@@ -145,17 +158,17 @@ a:hover {
 }
 
 .variable {
-    color: #e0af68;
+    color: var(--pale-green);
 }
 
-/* Orange/Yellow */
 .comment {
-    color: #565f89;
+    color: var(--dim-green);
     font-style: italic;
 }
 
 .prompt {
     color: var(--prompt-color);
+    text-shadow: 0 0 6px rgba(0, 255, 65, 0.5);
     margin-right: 10px;
     user-select: none;
 }
@@ -167,20 +180,24 @@ a:hover {
 
 .command-line {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     margin-bottom: 0.8rem;
     font-weight: 700;
+    color: var(--bright-green);
 }
 
 .command-line .prompt {
-    color: var(--prompt-color);
     margin-right: 12px;
-    user-select: none;
+    flex-shrink: 0;
+}
+
+.command-line .command {
+    /* Let long commands wrap instead of overflowing on small screens */
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .output-block {
-    margin-left: 0;
-    /* Keep it aligned with left or slightly indented if preferred */
     color: var(--text-color);
     line-height: 1.7;
 }
@@ -190,48 +207,45 @@ a:hover {
     display: grid;
     grid-template-columns: auto auto auto auto 1fr;
     gap: 0.5rem 1.5rem;
-    font-family: inherit;
     color: var(--text-color);
 }
 
 .file-row {
     display: contents;
-    transition: color 0.2s;
 }
 
 .file-row:hover .file-name a {
     text-decoration: underline;
-    color: var(--keyword-color);
+    color: var(--pale-green);
 }
 
 .permissions {
-    color: #565f89;
+    color: var(--dim-green);
 }
 
 .user {
-    color: #e0af68;
+    color: var(--text-color);
 }
 
 .size {
-    color: #565f89;
+    color: var(--dim-green);
     text-align: right;
 }
 
 .date {
-    color: #565f89;
+    color: var(--dim-green);
 }
 
 .file-name {
-    color: var(--accent-color);
+    color: var(--bright-green);
     font-weight: bold;
+    overflow-wrap: anywhere;
 }
 
 .file-name a {
     text-decoration: none;
     color: inherit;
 }
-
-/* Grid for social links (Removed old .social-list) */
 
 /* Cursor Animation */
 .cursor-container {
@@ -243,6 +257,7 @@ a:hover {
     width: 10px;
     height: 1.2em;
     background-color: var(--cursor-color);
+    box-shadow: 0 0 6px rgba(0, 255, 65, 0.6);
     vertical-align: text-bottom;
     animation: blink 1s step-end infinite;
 }
@@ -271,18 +286,40 @@ a:hover {
     }
 }
 
-/* Responsive */
-@media (max-width: 650px) {
-    body {
-        padding: 5px;
+/* Responsive: tablet */
+@media (max-width: 900px) {
+    .terminal-body {
+        padding: 24px 20px;
     }
 
-    .terminal-window {
-        min-height: 90vh;
+    .file-list {
+        /* 'date' column is hidden below, so drop to 4 columns */
+        grid-template-columns: auto auto auto 1fr;
+        gap: 0.5rem 1rem;
+    }
+
+    .date {
+        display: none;
+    }
+}
+
+/* Responsive: phone */
+@media (max-width: 650px) {
+    html,
+    body {
+        font-size: 15px;
+    }
+
+    body {
+        padding: 10px;
     }
 
     .terminal-body {
-        padding: 15px;
+        padding: 18px 14px;
+    }
+
+    .terminal-interaction {
+        margin-bottom: 1.5rem;
     }
 
     .file-list {
@@ -291,12 +328,15 @@ a:hover {
         gap: 0.8rem;
     }
 
+    .file-row {
+        display: block;
+    }
+
     .permissions,
     .user,
     .size,
     .date {
         display: none;
-        /* Hide extra details on mobile for cleaner look */
     }
 
     .file-row::before {
